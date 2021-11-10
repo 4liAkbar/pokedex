@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 abstract class AbstractResponseHandler {
 
 	fun done(
-		msg: String? = "",
+		msg: String? = "OK",
 		httpStatus: HttpStatus = HttpStatus.OK
 	): ResponseEntity<ResultResponse<Any>> {
 
@@ -19,7 +19,7 @@ abstract class AbstractResponseHandler {
 	}
 
 	private fun onError(msg: String?, ex: Exception, httpStatus: HttpStatus): ResponseEntity<ResultResponse<Any>> {
-		val debugInfo = null
+		val debugInfo = ex.message
 
 		val metaResponse = MetaResponse(
 			code = httpStatus.value(),

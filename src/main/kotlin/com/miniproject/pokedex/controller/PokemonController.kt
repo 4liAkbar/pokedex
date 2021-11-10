@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.miniproject.pokedex.config.base.BaseController
 import com.miniproject.pokedex.config.base.ResultResponse
 import com.miniproject.pokedex.model.PokemonApiResponse
-import com.miniproject.pokedex.model.PokemonData
 import com.miniproject.pokedex.model.PokemonDetailData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -21,8 +20,7 @@ import java.net.http.HttpResponse
 
 @RestController
 @RequestMapping(value = ["/ws"])
-class PokemonController @Autowired constructor(
-) : BaseController() {
+class PokemonController @Autowired constructor() : BaseController() {
 
     val pokeApiUrl : String = "https://pokeapi.co/api/v2/pokemon"
 

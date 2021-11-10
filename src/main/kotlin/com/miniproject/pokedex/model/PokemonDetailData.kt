@@ -25,7 +25,7 @@ data class Abilities(
     var ability: Ability? = null,
 
     @JsonProperty(value="is_hidden")
-    var _is_hidden: Boolean? = null
+    var isHidden: Boolean? = null
 )
 
 @JsonIgnoreProperties("url")
