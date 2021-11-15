@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping(value = ["/ws"])
 class PokemonController @Autowired constructor(
-    val pokemonService: PokemonService) : BaseController() {
+    val pokemonService: PokemonService
+    ) : BaseController() {
 
     @GetMapping(value = ["pokemon", "pokemon/{name}"])
     fun getPokemon(
@@ -20,4 +21,5 @@ class PokemonController @Autowired constructor(
         null -> generateResponse(pokemonService.findAllPokemon(start, limit)).done()
         else -> generateResponse(pokemonService.findPokemonByName(name)).done()
     }
+
 }

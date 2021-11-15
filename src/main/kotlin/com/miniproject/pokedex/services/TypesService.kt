@@ -1,7 +1,7 @@
 package com.miniproject.pokedex.services
 
-import com.miniproject.pokedex.model.TypeDetailData
+import com.miniproject.pokedex.model.redis.TypesRedis
 
 interface TypesService {
-    fun getAllTypes() : List<TypeDetailData>
+    fun getPokemonType(name: String): TypesRedis?
 }

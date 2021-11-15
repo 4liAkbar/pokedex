@@ -1,4 +1,4 @@
-package com.miniproject.pokedex.model
+package com.miniproject.pokedex.model.payload
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
