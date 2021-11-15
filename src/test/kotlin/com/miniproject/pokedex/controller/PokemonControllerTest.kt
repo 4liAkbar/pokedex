@@ -26,12 +26,15 @@ internal class PokemonControllerTest {
     }
 
     @Test
-    fun getPokemon(){
-        Mockito.`when`(pokemonService.findPokemonByName("1"))
-            .thenReturn(PokemonDetailResponse())
-
+    fun getPokemonList(){
         Mockito.`when`(pokemonService.findAllPokemon(0, 20))
             .thenReturn(null)
 
+    }
+
+    @Test
+    fun getPokemonByName(){
+        Mockito.`when`(pokemonService.findPokemonByName("1"))
+            .thenReturn(PokemonDetailResponse())
     }
 }

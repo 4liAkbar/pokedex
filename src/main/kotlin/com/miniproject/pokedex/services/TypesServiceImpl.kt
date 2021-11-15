@@ -30,7 +30,7 @@ class TypesServiceImpl @Autowired constructor(
         return data
     }
 
-    private fun storeToRedisAndGetTypePokemon(name: String): TypesRedis? {
+    private fun storeToRedisAndGetTypePokemon(name: String): TypesRedis {
         val typeDetailData : TypeDetailData = jacksonObjectMapper().readValue(
             hitApiGet("${GlobalConstants.POKEMON_URL}/type/$name"))
 

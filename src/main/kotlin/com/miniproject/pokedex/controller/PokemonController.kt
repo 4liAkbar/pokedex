@@ -13,13 +13,20 @@ class PokemonController @Autowired constructor(
     val pokemonService: PokemonService
     ) : BaseController() {
 
-    @GetMapping(value = ["pokemon", "pokemon/{name}"])
-    fun getPokemon(
-        @PathVariable(value = "name", required = false) name: String?,
+    @GetMapping(value = ["pokemon"])
+    fun getPokemonList(
         @RequestParam start: Int?, limit: Int?
-    ): ResponseEntity<ResultResponse<Any>> = when (name) {
-        null -> generateResponse(pokemonService.findAllPokemon(start, limit)).done()
-        else -> generateResponse(pokemonService.findPokemonByName(name)).done()
+    ): ResponseEntity<ResultResponse<Any>> {
+        val response = pokemonService.findAllPokemon(start, limit)
+        return generateResponse(response).done()
+    }
+
+    @GetMapping(value = ["pokemon/{name}"])
+    fun getPokemonByName(
+        @PathVariable("name") name: String,
+    ): ResponseEntity<ResultResponse<Any>> {
+        val response = pokemonService.findPokemonByName(name)
+        return generateResponse(response).done()
     }
 
 }

@@ -46,35 +46,28 @@ class PokemonServiceImpl @Autowired constructor(
 
     override fun findPokemonByName(name : String) : PokemonDetailResponse {
         var pokemonDetailResponse = PokemonDetailResponse()
-        try{
-            val pokemonDetailData : PokemonDetailData = jacksonObjectMapper().readValue(hitApiGet("$POKEMON_URL/pokemon/$name"))
-            if(pokemonDetailData.id != null){
-                val pokemonDetailType = ArrayList<String>()
-                var pokemonWeakness = ArrayList<String>()
-                var pokemonResistance = ArrayList<String>()
-                pokemonDetailData.types?.forEach {
-                    it.type?.name?.let { typeName -> pokemonDetailType.add(typeName) }
+        val pokemonDetailData : PokemonDetailData = jacksonObjectMapper().readValue(hitApiGet("$POKEMON_URL/pokemon/$name"))
+        if(pokemonDetailData.id != null){
+            val pokemonDetailType = ArrayList<String>()
+            var pokemonWeakness = ArrayList<String>()
+            var pokemonResistance = ArrayList<String>()
+            pokemonDetailData.types?.forEach {
+                it.type?.name?.let { typeName -> pokemonDetailType.add(typeName) }
 
-                    val weaknessResist = it.type?.name?.let { it1 -> typesService.getPokemonType(it1)}
-                    pokemonWeakness = weaknessResist?.weakness!!
-                    pokemonResistance = weaknessResist?.resistance!!
-                }
-
-                pokemonDetailResponse = PokemonDetailResponse(
-                    id = pokemonDetailData.id,
-                    name = pokemonDetailData.name?.capitalized(),
-                    type = pokemonDetailType,
-                    sprite = pokemonDetailData.sprites?.frontDefault,
-                    resistance = pokemonResistance,
-                    weakness = pokemonWeakness,
-                    description = "Height : ${pokemonDetailData._height}, Weight : ${pokemonDetailData._weight}"
-                )
-
-                return pokemonDetailResponse
+                val weaknessResist = it.type?.name?.let { it1 -> typesService.getPokemonType(it1)}
+                pokemonWeakness = weaknessResist?.weakness!!
+                pokemonResistance = weaknessResist?.resistance!!
             }
 
-        }catch(ex : Exception){
-            throw DataNotFoundException("Pokemon $name not found")
+            pokemonDetailResponse = PokemonDetailResponse(
+                id = pokemonDetailData.id,
+                name = pokemonDetailData.name?.capitalized(),
+                type = pokemonDetailType,
+                sprite = pokemonDetailData.sprites?.frontDefault,
+                resistance = pokemonResistance,
+                weakness = pokemonWeakness,
+                description = "Height : ${pokemonDetailData._height}, Weight : ${pokemonDetailData._weight}"
+            )
         }
 
         return pokemonDetailResponse
