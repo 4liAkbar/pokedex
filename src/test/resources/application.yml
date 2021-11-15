@@ -1,0 +1,51 @@
+logging:
+  level:
+    org:
+      apache:
+        http: DEBUG
+      springframework:
+        web: DEBUG
+
+spring:
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+      fail-on-null-for-primitives: true
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  jpa:
+    properties:
+      hibernate:
+        order_inserts: true
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      jdbc:
+        lob:
+        non_contextual_creation: true
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pokedex?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: pass@word1
+
+  hikari:
+      minimumIdle: 1
+      maximumPoolSize:
+
+config:
+  name: pokedex
+  defaultLanguage: in_id
+  acceptedLanguage: id_id, in_id, en_us
+  restTemplate:
+    connectionTimeout: 30000
+    readTimeout: 30000
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database:
+      config: 1
