@@ -36,20 +36,12 @@ fun String.capitalized(): String {
 	}
 }
 
-
 fun hitApiGet(apiUrl : String) : String{
-	var result = ""
-	try{
-		val client = HttpClient.newBuilder().build()
-		val request = HttpRequest.newBuilder()
-			.uri(URI.create(apiUrl))
-			.build()
+	val client = HttpClient.newBuilder().build()
+	val request = HttpRequest.newBuilder()
+		.uri(URI.create(apiUrl))
+		.build()
 
-		val responseApi = client.send(request, HttpResponse.BodyHandlers.ofString())
-		if(responseApi.statusCode()==200) result = responseApi.body()
-	}catch (ex : Exception){
-		println(ex.message)
-	}
-
-	return result
+	val responseApi = client.send(request, HttpResponse.BodyHandlers.ofString())
+	return responseApi.body()
 }

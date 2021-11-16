@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.miniproject.pokedex.config.extension.*
-import com.miniproject.pokedex.config.property.WebSettingsKeys.SLUG_POKEMON_TYPE
 import com.miniproject.pokedex.config.redis.RedisKey
 import com.miniproject.pokedex.config.property.GlobalConstants
+import com.miniproject.pokedex.config.property.GlobalConstants.SLUG_POKEMON_TYPE
 import com.miniproject.pokedex.model.data.TypeDetailData
 import com.miniproject.pokedex.model.redis.TypesRedis
 import org.springframework.beans.factory.annotation.Autowired

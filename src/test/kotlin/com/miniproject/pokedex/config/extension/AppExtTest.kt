@@ -2,7 +2,6 @@ package com.miniproject.pokedex.config.extension
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -33,11 +32,11 @@ internal class AppExtTest {
         val menuInJson: String = menu.toJson()
         val menuAfterParsing = ObjectMapper().readValue<Map<String, Any>>(menuInJson)
 
-        Assertions.assertNotNull(menuInJson)
-        Assertions.assertNotNull(menuAfterParsing)
-        Assertions.assertEquals(menuAfterParsing["menu"], "Espresso")
-        Assertions.assertEquals(menuAfterParsing["price"], 25000)
-        Assertions.assertEquals(menuAfterParsing["available"], true)
+        assertNotNull(menuInJson)
+        assertNotNull(menuAfterParsing)
+        assertEquals(menuAfterParsing["menu"], "Espresso")
+        assertEquals(menuAfterParsing["price"], 25000)
+        assertEquals(menuAfterParsing["available"], true)
     }
 
     @Test
@@ -53,10 +52,10 @@ internal class AppExtTest {
         Mockito.`when`(redisTemplate.delete(any<String>())).thenReturn(true)
 
         redisTemplate.storeAsValue(sampleKey, sampleValue)
-        Assertions.assertEquals(redisTemplate.getValue(sampleKey), sampleValue)
+        assertEquals(redisTemplate.getValue(sampleKey), sampleValue)
 
         redisTemplate.delete(sampleKey)
-        Assertions.assertNull(redisTemplate.getValue(sampleKey))
+        assertNull(redisTemplate.getValue(sampleKey))
     }
 
 
