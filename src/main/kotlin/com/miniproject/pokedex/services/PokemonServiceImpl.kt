@@ -53,7 +53,7 @@ class PokemonServiceImpl @Autowired constructor(
         var pokemonDetailResponse = PokemonDetailResponse()
 
         val apiDetailResponse = hitApiGet("$POKEMON_URL/pokemon/$name")
-        println(apiDetailResponse)
+
         if (apiDetailResponse != "Not Found") {
             val pokemonDetailData: PokemonDetailData =
                 jacksonObjectMapper().readValue(apiDetailResponse)
