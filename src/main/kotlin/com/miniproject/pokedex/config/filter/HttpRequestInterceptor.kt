@@ -18,41 +18,41 @@ import javax.servlet.http.HttpServletResponse
 class HttpRequestInterceptor @Autowired constructor(
 ) : HandlerInterceptorAdapter() {
 
-	private var logger = LogFactory.getLog(this.javaClass)
+    private var logger = LogFactory.getLog(this.javaClass)
 
-	override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-		when {
-			handler is ResourceHttpRequestHandler -> {
-				printException(
-					DataNotFoundException("Resource not found"),
-					HttpStatus.NOT_FOUND.value(),
-					response
-				)
-				return false
-			}
-		}
+    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        when {
+            handler is ResourceHttpRequestHandler -> {
+                printException(
+                    DataNotFoundException("Resource not found"),
+                    HttpStatus.NOT_FOUND.value(),
+                    response
+                )
+                return false
+            }
+        }
 
-		return true
-	}
+        return true
+    }
 
-	private fun printException(ex: Throwable, httpStatus: Int, response: HttpServletResponse) {
-		val message = ex.localizedMessage
-		val meta = MetaResponse(
-			code = httpStatus,
-			message = message,
-			debugInfo = null
-		)
-		val result = ResultResponse<Any>(
-			status = "ERROR",
-			meta = meta
-		)
+    private fun printException(ex: Throwable, httpStatus: Int, response: HttpServletResponse) {
+        val message = ex.localizedMessage
+        val meta = MetaResponse(
+            code = httpStatus,
+            message = message,
+            debugInfo = null
+        )
+        val result = ResultResponse<Any>(
+            status = "ERROR",
+            meta = meta
+        )
 
-		logger.error(ex)
-		response.apply {
-			status = httpStatus
-			contentType = MediaType.APPLICATION_JSON_VALUE
-			writer.write(result.toJson())
-		}
-	}
+        logger.error(ex)
+        response.apply {
+            status = httpStatus
+            contentType = MediaType.APPLICATION_JSON_VALUE
+            writer.write(result.toJson())
+        }
+    }
 
 }

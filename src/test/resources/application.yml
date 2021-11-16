@@ -34,8 +34,8 @@ spring:
     password: pass@word1
 
   hikari:
-      minimumIdle: 1
-      maximumPoolSize:
+    minimumIdle: 1
+    maximumPoolSize:
 
 config:
   name: pokedex

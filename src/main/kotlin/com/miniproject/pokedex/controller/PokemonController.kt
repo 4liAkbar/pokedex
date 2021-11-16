@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping(value = ["/ws"])
 class PokemonController @Autowired constructor(
     val pokemonService: PokemonService
-    ) : BaseController() {
+) : BaseController() {
 
     @GetMapping(value = ["pokemon"])
     fun getPokemonList(

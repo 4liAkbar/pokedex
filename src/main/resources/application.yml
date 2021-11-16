@@ -7,6 +7,9 @@ logging:
         web: DEBUG
 
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+
   jackson:
     deserialization:
       fail-on-unknown-properties: false
@@ -34,8 +37,8 @@ spring:
     password: pass@word1
 
   hikari:
-      minimumIdle: 1
-      maximumPoolSize:
+    minimumIdle: 1
+    maximumPoolSize:
 
 config:
   name: pokedex

@@ -11,6 +11,6 @@ import org.springframework.scheduling.annotation.EnableAsync
 class PokedexApplication
 
 fun main(args: Array<String>) {
-	runApplication<PokedexApplication>(*args)
+    runApplication<PokedexApplication>(*args)
 }
 

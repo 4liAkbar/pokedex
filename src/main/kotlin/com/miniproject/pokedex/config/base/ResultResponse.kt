@@ -1,7 +1,7 @@
 package com.miniproject.pokedex.config.base
 
 data class ResultResponse<T>(
-	var status: String,
-	var data: T? = null,
-	var meta: MetaResponse
+    var status: String,
+    var data: T? = null,
+    var meta: MetaResponse
 )
