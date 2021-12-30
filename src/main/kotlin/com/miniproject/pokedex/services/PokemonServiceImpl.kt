@@ -2,26 +2,37 @@ package com.miniproject.pokedex.services
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.miniproject.pokedex.config.exception.AppException
+import com.miniproject.pokedex.config.exception.DataNotFoundException
 import com.miniproject.pokedex.config.extension.capitalized
 import com.miniproject.pokedex.config.extension.hitApiGet
 import com.miniproject.pokedex.config.property.GlobalConstants.POKEMON_URL
+import com.miniproject.pokedex.model.entity.PokemonEntity
 import com.miniproject.pokedex.model.payload.PokemonDetailResponse
 import com.miniproject.pokedex.model.payload.PokemonResponse
 import com.miniproject.pokedex.model.payload.pokeapi.PokemonApiResponse
 import com.miniproject.pokedex.model.payload.pokeapi.PokemonDetailData
+import com.miniproject.pokedex.repository.PokemonRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
-import org.springframework.web.servlet.NoHandlerFoundException
+import kotlin.collections.ArrayList
 
 @Service
 class PokemonServiceImpl @Autowired constructor(
-    private val typesService: TypesService
+    private val typesService: TypesService,
+    private val pokemonRepository: PokemonRepository
 ) : PokemonService {
 
-    override fun findAllPokemon(start: Int?, limit: Int?): List<PokemonResponse> {
+    override fun findAllPokemon(page: Int, limit: Int): List<PokemonResponse> {
         val pokemonListResponse = ArrayList<PokemonResponse>()
         var pokemonId = 0
+
+        when{
+            (page < 1) -> throw AppException("Parameter page can't below 1")
+            (limit < 1) -> throw AppException("Parameter limit can't below 1")
+        }
+
+        val start = (page-1) * limit
         val params = mapOf("offset" to start, "limit" to limit)
         val urlParams = params.map { (key, value) -> "${key}=${value}" }
             .joinToString("&")
@@ -31,9 +42,9 @@ class PokemonServiceImpl @Autowired constructor(
 
         if (listPokemon._results != null) {
             pokemonId = pokemonId.plus(
-                when (start) {
-                    null -> 1
-                    else -> start
+                when {
+                    (start <= 0) -> 1
+                    else -> start+1
                 }
             )
 
@@ -50,41 +61,65 @@ class PokemonServiceImpl @Autowired constructor(
     }
 
     override fun findPokemonByName(name: String): PokemonDetailResponse {
-        var pokemonDetailResponse = PokemonDetailResponse()
+        val pokemonDetailResponse = pokemonRepository.findByNameOrId(name, name.toLongOrNull() ?: 0)
+        return when(pokemonDetailResponse){
+            null ->  return savePokemon(name)
+            else -> PokemonDetailResponse(
+                id = pokemonDetailResponse.id,
+                name = pokemonDetailResponse.name,
+                description = pokemonDetailResponse.description,
+                sprite = pokemonDetailResponse.sprite,
+                weakness = pokemonDetailResponse.weakness?.split(",")?.map { it.trim() },
+                resistance = pokemonDetailResponse.resistance?.split(",")?.map { it.trim() },
+                type = pokemonDetailResponse.type?.split(",")?.map { it.trim() }
+            )
+        }
+    }
 
+    private fun savePokemon(name: String): PokemonDetailResponse {
         val apiDetailResponse = hitApiGet("$POKEMON_URL/pokemon/$name")
 
-        if (apiDetailResponse != "Not Found") {
-            val pokemonDetailData: PokemonDetailData =
-                jacksonObjectMapper().readValue(apiDetailResponse)
-            if (pokemonDetailData.id != null) {
-                val pokemonDetailType = ArrayList<String>()
-                var pokemonWeakness = ArrayList<String>()
-                var pokemonResistance = ArrayList<String>()
-                pokemonDetailData.types?.forEach {
-                    it.type?.name?.let { typeName -> pokemonDetailType.add(typeName) }
+        val pokemonDetailType = ArrayList<String>()
+        var pokemonWeakness : List<String> = emptyList()
+        var pokemonResistance : List<String> = emptyList()
 
-                    val weaknessResist = it.type?.name?.let { it1 -> typesService.getPokemonType(it1) }
-                    pokemonWeakness = weaknessResist?.weakness!!
-                    pokemonResistance = weaknessResist?.resistance!!
-                }
+        if (apiDetailResponse == "Not Found"){
+            throw DataNotFoundException("Pokemon $name not found")
+        }
 
-                pokemonDetailResponse = PokemonDetailResponse(
-                    id = pokemonDetailData.id,
-                    name = pokemonDetailData.name?.capitalized(),
-                    type = pokemonDetailType,
-                    sprite = pokemonDetailData.sprites?.frontDefault,
-                    resistance = pokemonResistance,
-                    weakness = pokemonWeakness,
-                    description = "Height : ${pokemonDetailData._height}, Weight : ${pokemonDetailData._weight}"
-                )
+        val pokemonDetailData = jacksonObjectMapper().readValue<PokemonDetailData>(apiDetailResponse)
+
+        pokemonDetailData.types?.forEach {
+            pokemonDetailType.add(it.type?.name.orEmpty().capitalized())
+
+            val weaknessResist = typesService.getPokemonType(it.type?.name.orEmpty())
+            if(weaknessResist != null) {
+                pokemonWeakness = weaknessResist.weakness!!
+                pokemonResistance = weaknessResist.resistance!!
             }
-        } else {
-            throw NoHandlerFoundException("GET", "Pokemon $name", HttpHeaders.EMPTY)
+        }
+
+        val pokemonDetailResponse = PokemonDetailResponse(
+            id = pokemonDetailData.id,
+            name = pokemonDetailData.name?.capitalized(),
+            type = pokemonDetailType,
+            sprite = pokemonDetailData.sprites?.frontDefault,
+            resistance = pokemonResistance,
+            weakness = pokemonWeakness,
+            description = "Height : ${pokemonDetailData._height}, Weight : ${pokemonDetailData._weight}"
+        )
+        pokemonDetailResponse.let {
+            pokemonRepository.save(PokemonEntity(
+                id = it.id,
+                name = it.name,
+                description = it.description,
+                sprite = it.sprite,
+                type = pokemonDetailType.joinToString(),
+                resistance = pokemonResistance.joinToString(),
+                weakness = pokemonWeakness.joinToString()))
         }
 
         return pokemonDetailResponse
     }
-
 
 }

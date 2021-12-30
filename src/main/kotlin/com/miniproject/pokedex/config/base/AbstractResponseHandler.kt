@@ -13,37 +13,26 @@ abstract class AbstractResponseHandler {
     ): ResponseEntity<ResultResponse<Any>> {
 
         return when (val processResponse = data()) {
-            is Exception -> onError(msg, processResponse, httpStatus)
+            is Exception -> onError(processResponse, httpStatus)
             else -> onSuccess(msg, processResponse, httpStatus)
         }
     }
 
-    private fun onError(msg: String?, ex: Exception, httpStatus: HttpStatus): ResponseEntity<ResultResponse<Any>> {
+    private fun onError(ex: Exception, httpStatus: HttpStatus): ResponseEntity<ResultResponse<Any>> {
         val debugInfo = ex.message
 
-        val metaResponse = MetaResponse(
-            code = httpStatus.value(),
-            message = msg,
-            debugInfo = debugInfo
-        )
-
         val result = ResultResponse<Any>(
-            status = "ERROR",
-            meta = metaResponse
+            code = httpStatus.value(),
+            message = debugInfo.orEmpty()
         )
         return generateResponseEntity(result, httpStatus)
     }
 
     private fun onSuccess(msg: String?, any: Any, httpStatus: HttpStatus): ResponseEntity<ResultResponse<Any>> {
-        val metaResponse = MetaResponse(
-            code = httpStatus.value(),
-            message = msg
-        )
-
         val result = ResultResponse(
-            status = if (HttpStatus.valueOf(metaResponse.code).is2xxSuccessful) "OK" else "ERROR",
-            data = any,
-            meta = metaResponse
+            code = httpStatus.value(),
+            message = msg.orEmpty(),
+            data = any
         )
         return generateResponseEntity(result, httpStatus)
     }

@@ -15,9 +15,9 @@ class PokemonController @Autowired constructor(
 
     @GetMapping(value = ["pokemon"])
     fun getPokemonList(
-        @RequestParam start: Int?, limit: Int?
+        @RequestParam page: Int?, limit: Int?
     ): ResponseEntity<ResultResponse<Any>> {
-        val response = pokemonService.findAllPokemon(start, limit)
+        val response = pokemonService.findAllPokemon(page ?: 1, limit ?: 20)
         return generateResponse(response).done()
     }
 

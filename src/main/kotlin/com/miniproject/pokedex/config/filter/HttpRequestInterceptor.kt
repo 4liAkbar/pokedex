@@ -1,6 +1,5 @@
 package com.miniproject.pokedex.config.filter
 
-import com.miniproject.pokedex.config.base.MetaResponse
 import com.miniproject.pokedex.config.base.ResultResponse
 import com.miniproject.pokedex.config.exception.DataNotFoundException
 import com.miniproject.pokedex.config.extension.toJson
@@ -37,14 +36,9 @@ class HttpRequestInterceptor @Autowired constructor(
 
     private fun printException(ex: Throwable, httpStatus: Int, response: HttpServletResponse) {
         val message = ex.localizedMessage
-        val meta = MetaResponse(
-            code = httpStatus,
-            message = message,
-            debugInfo = null
-        )
         val result = ResultResponse<Any>(
-            status = "ERROR",
-            meta = meta
+            code = httpStatus,
+            message = message
         )
 
         logger.error(ex)

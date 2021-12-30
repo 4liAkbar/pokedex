@@ -34,5 +34,6 @@ internal class PokemonControllerTest {
     fun getPokemonByName() {
         Mockito.`when`(pokemonService.findPokemonByName("1"))
             .thenReturn(PokemonDetailResponse())
+
     }
 }

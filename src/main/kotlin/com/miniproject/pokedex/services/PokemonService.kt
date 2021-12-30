@@ -5,7 +5,7 @@ import com.miniproject.pokedex.model.payload.PokemonResponse
 
 interface PokemonService {
 
-    fun findAllPokemon(start: Int?, limit: Int?): List<PokemonResponse>
+    fun findAllPokemon(page: Int, limit: Int): List<PokemonResponse>
 
     fun findPokemonByName(name: String): PokemonDetailResponse
 }

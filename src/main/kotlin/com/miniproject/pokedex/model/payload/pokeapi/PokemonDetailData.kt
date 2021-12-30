@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class PokemonDetailData(
     @JsonProperty(value = "id")
-    var id: Int? = 0,
+    var id: Long? = 0,
     @JsonProperty(value = "name")
     var name: String? = null,
     @JsonProperty(value = "height")
