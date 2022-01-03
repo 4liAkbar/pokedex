@@ -5,6 +5,6 @@ import org.springframework.data.redis.core.RedisHash
 @RedisHash("Type")
 data class TypesRedis(
     val name: String? = null,
-    val weakness: ArrayList<String>? = null,
-    val resistance: ArrayList<String>? = null
+    val weakness: List<String> = emptyList(),
+    val resistance: List<String> = emptyList()
 )

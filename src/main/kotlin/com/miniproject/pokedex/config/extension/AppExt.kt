@@ -12,7 +12,6 @@ import java.net.http.HttpResponse
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 fun Any.toJson(): String = jacksonObjectMapper()
     .registerModule(KotlinModule())
     .configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true)

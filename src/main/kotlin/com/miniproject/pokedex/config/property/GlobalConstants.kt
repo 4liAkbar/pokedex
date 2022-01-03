@@ -7,5 +7,4 @@ object GlobalConstants {
     const val MESSAGE_SEPARATOR = "::"
 
     const val SLUG_POKEMON_TYPE = "pokemon-type"
-
 }

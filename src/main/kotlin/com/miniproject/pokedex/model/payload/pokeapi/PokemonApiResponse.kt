@@ -8,3 +8,9 @@ data class PokemonApiResponse(
     @JsonProperty(value = "results")
     var _results: ArrayList<PokemonData>? = null
 )
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class PokemonData(
+    @JsonProperty(value = "name")
+    var name: String? = null
+)

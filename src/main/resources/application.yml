@@ -36,10 +36,6 @@ spring:
     username: root
     password: pass@word1
 
-  hikari:
-    minimumIdle: 1
-    maximumPoolSize:
-
 config:
   name: pokedex
   defaultLanguage: in_id

@@ -7,16 +7,22 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class PokemonDetailData(
     @JsonProperty(value = "id")
     var id: Long? = 0,
+
     @JsonProperty(value = "name")
     var name: String? = null,
+
     @JsonProperty(value = "height")
     var _height: Int? = 0,
+
     @JsonProperty(value = "weight")
     var _weight: Int? = 0,
+
     @JsonProperty(value = "abilities")
     var abilities: List<Abilities>? = null,
+
     @JsonProperty(value = "types")
     var types: List<Types>? = null,
+
     @JsonProperty(value = "sprites")
     var sprites: Sprites? = null
 )
@@ -40,6 +46,7 @@ data class Types(
 data class Sprites(
     @JsonProperty(value = "back_default")
     var backDefault: String? = null,
+
     @JsonProperty(value = "front_default")
     var frontDefault: String? = null
 )

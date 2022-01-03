@@ -2,7 +2,6 @@ package com.miniproject.pokedex.model.payload
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-
 data class PokemonDetailResponse(
     @JsonProperty(value = "id")
     var id: Long? = null,
